@@ -17,6 +17,8 @@ public class SimpleClient extends AbstractClient {
 	protected void handleMessageFromServer(Object msg) {
 		Message message = (Message) msg;
 		if(message.getMessage().equals("update submitters IDs")){
+			//setSubmittersTF(message);
+			//message.setMessage("318307923, 205815962");
 			EventBus.getDefault().post(new UpdateMessageEvent(message));
 		}else if(message.getMessage().equals("client added successfully")){
 			EventBus.getDefault().post(new NewSubscriberEvent(message));
@@ -29,7 +31,8 @@ public class SimpleClient extends AbstractClient {
 	
 	public static SimpleClient getClient() {
 		if (client == null) {
-			client = new SimpleClient("localhost", 3000);
+			//client = new SimpleClient("localhost", 3000);
+			client = new SimpleClient("10.100.102.23", 3000);
 		}
 		return client;
 	}

@@ -6,6 +6,8 @@ import il.cshaifasweng.OCSFMediatorExample.server.ocsf.ConnectionToClient;
 import il.cshaifasweng.OCSFMediatorExample.server.ocsf.SubscribedClient;
 
 import java.io.IOException;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class SimpleServer extends AbstractServer {
@@ -47,20 +49,39 @@ public class SimpleServer extends AbstractServer {
 				message.setMessage("Hello World!");
 				client.sendToClient(message);
 			}
+			// sending here submitters IDs to client
 			else if(request.startsWith("send Submitters IDs")){
-				//add code here to send submitters IDs to client
+				message.setMessage("318307923, 205815962");
+				client.sendToClient(message);
+
 			}
+			// sending here names IDs to client
 			else if (request.startsWith("send Submitters")){
+				message.setMessage("Lior, Alon");
+				client.sendToClient(message);
 				//add code here to send submitters names to client
 			}
 			else if (request.equals("what’s the time?")) {
-				//add code here to send the time to client
+				DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm:ss");
+				LocalTime currentTime = LocalTime.now();
+				message.setMessage(currentTime.format(timeFormat));
+				client.sendToClient(message);
 			}
+			// send result of multiplication of two integers in the format of "multiply n*m"
 			else if (request.startsWith("multiply")){
-				//add code here to multiply 2 numbers received in the message and send result back to client
-				//(use substring method as shown above)
-				//message format: "multiply n*m"
-			}else{
+				// clean the unnecessary suffix and whitespaces
+				String MsgStr = request.toString().substring(8).replaceAll("\\s+","");
+				// calculation
+				int nulIndex = MsgStr.indexOf("*");
+				int result = Integer.parseInt(MsgStr.substring(0, nulIndex)) * Integer.parseInt(MsgStr.substring(nulIndex+1));
+				// msg send to client
+				message.setMessage(Integer.toString(result));
+				client.sendToClient(message);
+			}
+			// get and send the same message
+			else{
+				message.setMessage(request.toString());
+				client.sendToClient(message);
 				//add code here to send received message to all clients.
 				//The string we received in the message is the message we will send back to all clients subscribed.
 				//Example:
